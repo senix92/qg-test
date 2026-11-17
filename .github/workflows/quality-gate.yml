@@ -69,3 +69,4 @@ jobs:
             console.log("Alle Pflichtjobs erfolgreich:", expected.join(", "));
           '
 # Abnahme: Kommentaränderung (Test 1)
+# Abnahme: Kommentar im Workflow (Code-Owner-Test, Autor esc)
