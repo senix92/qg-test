@@ -1,0 +1,70 @@
+# Von Quality Guard erzeugt. Änderungen an dieser Datei benötigen Code-Owner-Review (siehe CODEOWNERS/Ruleset).
+# Sicherheitsvorgaben: nur unprivilegierte Trigger, keine Secrets, minimale Rechte (nur Lesen).
+name: quality-gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm install --ignore-scripts
+      - name: Geprüfte Revision und Werkzeugversionen
+        run: |
+          echo "revision=$(git rev-parse HEAD) tree=$(git rev-parse HEAD^{tree})" >> "$GITHUB_STEP_SUMMARY"
+          node --version >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - run: npm run lint
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm install --ignore-scripts
+      - name: Geprüfte Revision und Werkzeugversionen
+        run: |
+          echo "revision=$(git rev-parse HEAD) tree=$(git rev-parse HEAD^{tree})" >> "$GITHUB_STEP_SUMMARY"
+          node --version >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - run: npm test
+
+  # Abschließendes Gate: Erfolg NUR, wenn alle erwarteten Pflichtjobs "success" melden.
+  # Fehlende, übersprungene, abgebrochene oder fehlgeschlagene Jobs lassen es scheitern.
+  quality-gate:
+    name: quality-gate
+    if: always()
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    env:
+      NEEDS: ${{ toJSON(needs) }}
+      EXPECTED: "lint,test"
+    steps:
+      - name: Pflichtjobs prüfen
+        run: |
+          node -e '
+            const needs = JSON.parse(process.env.NEEDS);
+            const expected = process.env.EXPECTED.split(",").filter(Boolean);
+            const bad = expected.filter(j => !needs[j] || needs[j].result !== "success");
+            if (!expected.length) { console.error("Keine Pflichtjobs definiert"); process.exit(1); }
+            if (bad.length) { console.error("Pflichtjobs nicht erfolgreich:", bad.map(j => j + "=" + (needs[j] ? needs[j].result : "fehlt")).join(", ")); process.exit(1); }
+            console.log("Alle Pflichtjobs erfolgreich:", expected.join(", "));
+          '

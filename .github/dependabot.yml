@@ -1,0 +1,13 @@
+version: 2
+# Ein Update je Pull Request (kleine, getrennte Changes); Übernahme nur nach bestandenem quality-gate.
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
