@@ -1,0 +1,9 @@
+{
+  "name": "qg-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node test/run.js",
+    "lint": "node lint.js"
+  }
+}
