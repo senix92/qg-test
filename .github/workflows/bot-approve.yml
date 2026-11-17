@@ -1,0 +1,19 @@
+# Abnahmetest (Code-Owner-Pflicht): gibt eine allgemeine Freigabe durch github-actions[bot] ab. Der Bot ist kein Code-Owner.
+name: bot-approve
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: PR-Nummer
+        required: true
+permissions:
+  pull-requests: write
+  contents: read
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr review "$PR" --approve --body "Abnahmetest: allgemeine Freigabe durch github-actions[bot] (kein Code-Owner)" -R "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ inputs.pr }}
