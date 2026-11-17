@@ -68,3 +68,4 @@ jobs:
             if (bad.length) { console.error("Pflichtjobs nicht erfolgreich:", bad.map(j => j + "=" + (needs[j] ? needs[j].result : "fehlt")).join(", ")); process.exit(1); }
             console.log("Alle Pflichtjobs erfolgreich:", expected.join(", "));
           '
+# Abnahme: Kommentaränderung (Test 1)
