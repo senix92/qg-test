@@ -13,7 +13,8 @@ jobs:
   approve:
     runs-on: ubuntu-latest
     steps:
-      - run: gh pr review "$PR" --approve --body "Abnahmetest: allgemeine Freigabe durch github-actions[bot] (kein Code-Owner)" -R "$GITHUB_REPOSITORY"
+      - run: |
+          gh pr review "$PR" --approve --body "Abnahmetest allgemeine Freigabe durch github-actions[bot], kein Code-Owner" -R "$GITHUB_REPOSITORY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ inputs.pr }}
