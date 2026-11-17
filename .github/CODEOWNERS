@@ -1,5 +1,5 @@
 # Gate-Konfiguration, Workflows und Freigaben: Änderung nur mit Review des Owners (Ruleset: require_code_owner_review)
-/.github/workflows/ @senix92
-/.github/CODEOWNERS @senix92
-/.github/dependabot.yml @senix92
-/.quality-guard/ @senix92
+/.github/workflows/ @senix92 @esc-gmbh-tech
+/.github/CODEOWNERS @senix92 @esc-gmbh-tech
+/.github/dependabot.yml @senix92 @esc-gmbh-tech
+/.quality-guard/ @senix92 @esc-gmbh-tech
