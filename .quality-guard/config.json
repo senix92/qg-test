@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "profile": "standard",
+  "checks": {
+    "lint": {
+      "cmd": "npm run lint",
+      "levels": [
+        "fast",
+        "full"
+      ],
+      "required": true,
+      "timeoutSec": 300
+    },
+    "test": {
+      "cmd": "npm test",
+      "levels": [
+        "full"
+      ],
+      "required": true,
+      "timeoutSec": 900
+    }
+  },
+  "notRequired": [
+    {
+      "check": "lint",
+      "when": {
+        "onlyPaths": [
+          "**/*.md",
+          "docs/**",
+          "LICENSE*",
+          "*.txt"
+        ]
+      },
+      "reason": "reine Dokumentationsänderung: lint prüft keinen geänderten Code"
+    },
+    {
+      "check": "test",
+      "when": {
+        "onlyPaths": [
+          "**/*.md",
+          "docs/**",
+          "LICENSE*",
+          "*.txt"
+        ]
+      },
+      "reason": "reine Dokumentationsänderung: test prüft keinen geänderten Code"
+    }
+  ],
+  "detected": [
+    {
+      "stack": "node",
+      "pm": "npm"
+    }
+  ],
+  "vcs": {
+    "defaultBranch": "main"
+  }
+}
